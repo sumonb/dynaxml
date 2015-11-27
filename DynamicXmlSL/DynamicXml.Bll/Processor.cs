@@ -31,30 +31,7 @@ namespace DynamicXml.Bll
         }
 
 
-        public void WriteDatatableRow(DataRow prmDataRow)
-        {
-            //_writer.WriteStartElement("Listing");
-            //foreach (var col in prmDataRow)
-            //{
-            //    //_writer.WriteElementString(col.ColumnName, col.ToString());
-            //}
-            //_writer.WriteEndElement();
-        }
 
-        public void WriteDatatable(DataTable dt, string mainElementName, string itemElementName)
-        {
-            _writer.WriteStartElement(mainElementName);
-            foreach (DataRow row in dt.Rows)
-            {
-                _writer.WriteStartElement(itemElementName);
-                foreach (DataColumn col in dt.Columns)
-                    _writer.WriteElementString(col.ColumnName, row[col].ToString());
-
-                _writer.WriteEndElement();
-            }
-            _writer.WriteEndElement();
-
-        }
 
         public void WriteMultipleDatatable(List<PacketConfigurationInfo> multipleDataStore)
         {
@@ -69,7 +46,6 @@ namespace DynamicXml.Bll
         private void ProcessDataTable(int prmParentId, string prmFilterConditionValue)
         {
            
-
             //get the child table
             var retCurrentDt = _MultipleDataStoreInfos.Where(i => i.ParentId == prmParentId).ToList();
 
@@ -78,7 +54,7 @@ namespace DynamicXml.Bll
                 return;
 
 
-            //all children
+            //all children datatable
             foreach (var currentIndex in retCurrentDt)
             {
                 //print group header flag
@@ -120,17 +96,10 @@ namespace DynamicXml.Bll
 
                     //print item header flag
                     bool itemElementPresent = !string.IsNullOrWhiteSpace(currentIndex.ItemElementName);
-                    //if (itemElementPresent)
-                    //{
-                    //    _writer.WriteStartElement(currentIndex.ItemElementName);
-                    //}
-
-
-                    _writer.WriteSmartElement(currentIndex.ItemElementName, row, filtereDataTable, currentIndex.AttributeCollection);
-                    ////foreach (DataColumn col in filtereDataTable.Columns)
-                    ////{    //write row line item.   
-                    ////    _writer.WriteElementString(col.ColumnName, row[col].ToString());
-                    ////}
+   
+                    //now write all elements and attribute from current row
+                    _writer.WriteSmartElement(currentIndex.ItemElementName, row, filtereDataTable, currentIndex.XmlNodeMetaInfo);
+      
 
                     //Recursive
                     //=================================================================

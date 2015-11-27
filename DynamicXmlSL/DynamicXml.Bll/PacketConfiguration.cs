@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DynamicXml.Common;
 
 namespace DynamicXml.Bll
 {
@@ -18,7 +19,7 @@ namespace DynamicXml.Bll
         {
 
 
-            IDynamicContext con = new DynamicContext("data source=xxx;initial catalog=xxx;persist security info=True;user id=xx;password=xxx;");
+            IDynamicContext con = new DynamicContext("data source=##;initial catalog=##;persist security info=True;user id=##;password=##;");
 
 
             var dto = con.FetchData("root", CommandType.Text, "select * from FRListing", null);
@@ -41,7 +42,11 @@ namespace DynamicXml.Bll
                     ParentId = 0,
                     PrimaryKey = "FRListingID",
                     RelationKey = "FRListingID",
-                    AttributeCollection = new List<string>(){"FRListingID"}
+                    XmlNodeMetaInfo = new List<XmlElementMetaInfo>()
+                    {
+                        new XmlElementMetaInfo(){AttributeType = true, Name = "FRListingID" }
+                       
+                    }
                 }
                 ,
                 new PacketConfigurationInfo()
@@ -53,7 +58,13 @@ namespace DynamicXml.Bll
                     ParentId = 1,
                     PrimaryKey = "FRListingPaymentID",
                     RelationKey = "FRListingID",
-                     AttributeCollection = new List<string>(){"FRListingID","OfficeId"}
+                    XmlNodeMetaInfo = new List<XmlElementMetaInfo>()
+                    {
+                        new XmlElementMetaInfo(){AttributeType = true, Name = "FRListingID" },
+                        new XmlElementMetaInfo(){AttributeType = true, Name = "OfficeId" }
+                       
+                    }
+                     
                 } };
 
             return dd;
@@ -71,7 +82,7 @@ namespace DynamicXml.Bll
         public int ParentId { get; set; }
         public string PrimaryKey { get; set; }
         public string RelationKey { get; set; }
-        public List<string> AttributeCollection { get; set; }
+        public List<XmlElementMetaInfo> XmlNodeMetaInfo { get; set; }
 
     }
 

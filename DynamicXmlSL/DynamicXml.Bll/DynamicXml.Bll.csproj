@@ -55,6 +55,10 @@
       <Project>{7e1e53a8-7ad3-4738-8b50-37e59b5afea2}</Project>
       <Name>DynamicXml.Dal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DynamicXml.Entities\DynamicXml.Entities.csproj">
+      <Project>{09d7b05b-047a-43d5-becd-dfe1790356c4}</Project>
+      <Name>DynamicXml.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

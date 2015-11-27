@@ -24,8 +24,23 @@ namespace DynamicXml.Common
             }
         }
 
+        public void WriteDatatable(DataTable dt, string mainElementName, string itemElementName)
+        {
+            base.WriteStartElement(mainElementName);
+            foreach (DataRow row in dt.Rows)
+            {
+                base.WriteStartElement(itemElementName);
+                foreach (DataColumn col in dt.Columns)
+                    base.WriteElementString(col.ColumnName, row[col].ToString());
 
-        public void WriteSmartElement(string prmHeaderElementName, DataRow prmCurrentRow, DataTable dt, List<string> prmAttributeCollection )
+                base.WriteEndElement();
+            }
+            base.WriteEndElement();
+
+        }
+
+
+        public void WriteSmartElement(string prmHeaderElementName, DataRow prmCurrentRow, DataTable dt, List<XmlElementMetaInfo> prmAttributeCollection)
         {
             var itemElementPresent = !string.IsNullOrWhiteSpace(prmHeaderElementName);
             if (itemElementPresent)
@@ -34,16 +49,16 @@ namespace DynamicXml.Common
             }
 
             //now print attribute
-            foreach (var currentAttribute in prmAttributeCollection)
+            foreach (var currentAttribute in prmAttributeCollection.Where(a=>a.AttributeType==true))
             {
-                base.WriteAttributeString(currentAttribute, prmCurrentRow[currentAttribute].ToString());
+                base.WriteAttributeString(currentAttribute.Name, prmCurrentRow[currentAttribute.Name].ToString());
             }
 
             
             foreach (DataColumn col in dt.Columns)
             {
                 //don't write element if were part of attribute
-                var ret = prmAttributeCollection.Count(i => i == col.ColumnName);
+                var ret = prmAttributeCollection.Count(i => i.Name == col.ColumnName);
                 if(ret > 0)
                     continue;
 
@@ -68,4 +83,12 @@ namespace DynamicXml.Common
 
         }
     }
+
+    public class XmlElementMetaInfo
+    {
+        public string Name { get; set; }
+        public bool AttributeType { get; set; }
+        public string CustomFormatter { get; set; }
+    }
+
 }
