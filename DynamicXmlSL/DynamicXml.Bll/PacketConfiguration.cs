@@ -18,7 +18,7 @@ namespace DynamicXml.Bll
         {
 
 
-            IDynamicContext con = new DynamicContext("data source=172.30.20.135;initial catalog=FranchiseReturns21;persist security info=True;user id=sa;password=LJHook3r;");
+            IDynamicContext con = new DynamicContext("data source=xxx;initial catalog=xxx;persist security info=True;user id=xx;password=xxx;");
 
 
             var dto = con.FetchData("root", CommandType.Text, "select * from FRListing", null);
